@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { csv } from 'https://cdn.skypack.dev/d3-fetch@3';
-import { ComposableMap, Geographies, Geography, Sphere, Graticule } from 'react-simple-maps';
+import React, { memo, useEffect, useState } from 'react';
+import { ComposableMap, Geographies, Geography, ZoomableGroup, Graticule, Sphere } from 'react-simple-maps';
 import axios from 'axios';
 import { Apikey, BASE_URL } from '../../constants/urls';
 
-const geoUrl = 'https://unpkg.com/world-atlas/countries-50m.json';
+const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
 
-export default function HomeFeatures() {
-  const [ tooltip, setTooltip ] = useState('');
-	const [ data, setData ] = useState([]);
+function HomeFeatures({ setTooltipContent }) {
 	const [ infoCase, setInfoCases ] = useState([]);
 
 	const getInfoCountry = () => {
@@ -17,73 +14,70 @@ export default function HomeFeatures() {
 		});
 	};
 
-	function getTotalCasesByCountryName(coutryName) {
+	function getTotalCases(coutryName) {
 		const covidDataTemp = infoCase.filter((coutry) => coutry.location === coutryName);
-    const totalCases = covidDataTemp.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total,
-      0)
-
-    return totalCases
+    return covidDataTemp.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
 	}
 
   const onEnter = (dados) => {
     let data = [];
-    const totalCases = getTotalCasesByCountryName(dados)
+    const totalCases = getTotalCases(dados)
     infoCase.forEach((info) => {
       if (info.location === dados) {
         data = info;
       }
     })
-    setTooltip(`
-        ${data.location || dados} |
-        ${data.date} |
-        ${data.variant} |
-        ${totalCases} 
+    setTooltipContent(`
+        Country: ${dados} |
+        Date: ${data.date} |
+        Variant: ${data.variant} |
+        Total Cases: ${totalCases} 
       `);
   };
 
-  console.log(tooltip);
-
-
-  const onMouseLeave = () => {
-    setTooltip("");
+  const onLeave = () => {
+    setTooltipContent("");
   };
 
 	useEffect(() => {
-		csv(`/vulnerability.csv`).then((data) => {
-			setData(data);
 			getInfoCountry();
-		});
 	}, []);
 
 	return (
-		<div>
-			<ComposableMap
-				projectionConfig={{
-					rotate: [ -10, 0, 0 ],
-					scale: 140}}>
-            
-				<Sphere fill="blue" stroke="red" />
-				<Graticule fill="blue" stroke="black" />
-					<Geographies fill="orangered" stroke="black" geography={geoUrl}>
+    <>
+    <ComposableMap data-tip="" projectionConfig={{ scale: 110 }}>
+      <ZoomableGroup>
+      <Sphere fill="#0F3c4c" stroke="red" />
+				<Graticule fill="#0F3c4c" stroke="black" />
+        <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map((geo) => {
               return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  onMouseEnter={() => onEnter(geo.properties.name)}
-                  onMouseLeave={onMouseLeave}
-                  style={{
-                    hover: {
-                      fill: 'grey',
-                      cursor: 'pointer'
-                    }
-                  }}
-                />
-              );
-            })}
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                onMouseEnter={() => onEnter(geo.properties.NAME)}
+                onMouseLeave={() => onLeave()}
+                style={{
+                  default: {
+                    fill: "#D6D6DA",
+                    stroke: "black",
+                    outline: "none",
+                  },
+                  hover: {
+                    fill: "#1b89ae",
+                    outline: "none"
+                  }
+                }}
+              />
+            )})
+          }
         </Geographies>
-			</ComposableMap>
-		</div>
-	);
-}
+      </ZoomableGroup>
+    </ComposableMap>
+  </>
+);
+};
+
+
+export default memo(HomeFeatures);
