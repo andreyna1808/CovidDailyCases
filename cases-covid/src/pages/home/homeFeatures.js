@@ -27,7 +27,12 @@ function HomeFeatures({ setTooltipContent }) {
 	const getInfoCountry = () => {
 		axios.get(`${BASE_URL}`, Apikey).then((res) => {
 			setInfoCases(res.data);
-		});
+      console.log(res.data);
+		})
+    .catch((err) => {
+      console.log(err.response);
+    })
+    ;
 	};
   const getVariant = () => {
     axios.get(`${BASE_URL}?select=variant`, Apikey).then((res) => {
@@ -42,7 +47,7 @@ function HomeFeatures({ setTooltipContent }) {
   }
 	function getTotalCases(coutryName) {
 		const covidDataTemp = infoCase.filter((coutry) => coutry.location === coutryName);
-    const infoMore = covidDataTemp.filter((dados) => dados.date === dateSelect && dados.variant === nameVariant)
+    const infoMore = covidDataTemp.filter((info) => info.date === dateSelect && info.variant === nameVariant)
     return infoMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
 	}
   const onEnter = (dados) => {
@@ -75,8 +80,7 @@ function HomeFeatures({ setTooltipContent }) {
 			getInfoCountry();
       getVariant();
       getDate();
-      dateCorrect();
-	}, [infoCase, selectVariant ]);
+	}, [infoCase, selectVariant, selectDate]);
 
 
 	return (
