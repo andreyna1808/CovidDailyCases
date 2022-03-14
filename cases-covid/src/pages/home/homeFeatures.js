@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography, Graticule, Sphere } from 'react-simple-maps';
 import axios from 'axios';
 import { Apikey, BASE_URL } from '../../constants/urls';
-import { DateDados, DivInput, Paragrafo } from './style';
+import { DateDados, DivInput, Options, Paragrafo, Selects } from './style';
 const _ = require("lodash"); 
 
 const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
@@ -27,7 +27,6 @@ function HomeFeatures({ setTooltipContent }) {
 	const getInfoCountry = () => {
 		axios.get(`${BASE_URL}`, Apikey).then((res) => {
 			setInfoCases(res.data);
-      console.log(res.data);
 		})
     .catch((err) => {
       console.log(err.response);
@@ -85,17 +84,16 @@ function HomeFeatures({ setTooltipContent }) {
 
 	return (
     <>
-    <div>
-      <select onChange={onChange}>
-        <option value={nameVariant}>Alpha</option>
+      <Selects onChange={onChange}>
+        <Options value={nameVariant}>Alpha</Options>
          {selectVariant.slice(1,24).map((dados) => {
           return (
-            <option key={dados.id} value={dados.variant}>
+            <Options key={dados.id} value={dados.variant}>
               {dados.variant}
-            </option>
+            </Options>
           );
         })}
-      </select>
+      </Selects>
 
       <DivInput>
       <DateDados>
@@ -112,7 +110,6 @@ function HomeFeatures({ setTooltipContent }) {
       />
       </DivInput>
 
-    </div>
     <div>
     <ComposableMap data-tip="" projectionConfig={{ scale: 110 }}>
       <Sphere fill="#0F3C4C" stroke="red" />
