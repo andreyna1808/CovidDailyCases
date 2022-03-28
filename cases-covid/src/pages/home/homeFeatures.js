@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography, Graticule, Sphere } from 'react-simple-maps';
 import axios from 'axios';
 import { Apikey, BASE_URL } from '../../constants/urls';
-import { DateDados, DivInput, Options, Paragrafo, Selects } from './style';
+import { Button, DateDados, DivInput, Options, Paragrafo, Selects } from './style';
 const _ = require("lodash"); 
 
 const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
@@ -72,9 +72,7 @@ function HomeFeatures({ setTooltipContent }) {
            }, x * 800); // 1000 = 1 segundo
         }(x));
      }
-     setDateValue(0)
-  } 
-
+  }
   
 	useEffect(() => {
 		getInfoCountry();
@@ -95,7 +93,7 @@ function HomeFeatures({ setTooltipContent }) {
         })}
       </Selects>
 
-      <button onClick={() => onClickMap()}>Covid cases</button>
+      <Button onClick={() => onClickMap()}> ▶ Play Covid</Button>
 
     </div>
 

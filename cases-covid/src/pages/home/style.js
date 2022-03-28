@@ -54,3 +54,23 @@ export const Options = styled.option`
 	font-weight: bolder;
   color: black;
 `
+export const Button = styled.button`
+    background-color: transparent;
+    padding: 10px 22px;
+    font-size: 22px;
+    border-radius: 25px;
+    width: 250px;
+    margin-left: 5%;
+    color: #ffffff;
+    border: #1b89ae solid 2px;
+    cursor: pointer;
+    font-weight: 900;
+    &:hover{
+        background-color:  #ffffff;
+        color: #0f334c;
+        transition: 0.3s;
+    }
+    @media (max-width: 700px) {
+      margin: 5% auto;
+	  }
+`
