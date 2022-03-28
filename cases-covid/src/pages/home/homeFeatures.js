@@ -13,17 +13,6 @@ function HomeFeatures({ setTooltipContent }) {
   const [ date, setDate ] = useState([])
   const [ dateSelect, setDateSelect] = useState('2020-05-11')
   const [ dateValue, setDateValue ] = useState(0)
-  const [ newStyled, setNewStyled ] = useState({
-    default: {
-      fill: "white",
-      stroke: "black",
-      outline: "none",
-    },
-    hover: {
-      fill: "#1B89AE",
-      outline: "none"
-    }
-  })
 
   const onChange = (e) => {
     setNameVariant(e.target.value)
@@ -72,56 +61,21 @@ function HomeFeatures({ setTooltipContent }) {
     const filtrados = _.uniq(filterRepetidos)
     setDate(filtrados)
   }
-  
-  const quantidadeCases = infoCase.map((dados) => {
-    return dados.num_sequences_total
-  })
 
-  const onNewStyled = () => {
-    if(quantidadeCases <= 200){
-      setNewStyled({
-        default: {
-          fill: "yellow",
-          stroke: "black",
-          outline: "none",
-        },
-        hover: {
-          fill: "#1B89AE",
-          outline: "none"
-        }
-      })
-    }
-    else if(quantidadeCases >= 200 && quantidadeCases <= 1000){
-      setNewStyled({
-        default: {
-          fill: "oranged",
-          stroke: "black",
-          outline: "none",
-        },
-        hover: {
-          fill: "#1B89AE",
-          outline: "none"
-        }
-      })
-    }
-    else if(quantidadeCases > 1000){
-      setNewStyled({
-        default: {
-          fill: "red",
-          stroke: "black",
-          outline: "none",
-        },
-        hover: {
-          fill: "#1B89AE",
-          outline: "none"
-        }
-      })
-    }
+  let arr = date;
+  const onClickMap = () => {
+    for(var x = 0; x < arr.length; x++){
+      (function(x){
+        setTimeout(function(){
+          setDateSelect(arr[x]);
+         }, x * 1000); // 1000 = 1 segundo
+      }(x));
+   }
   }
-
+  
 	useEffect(() => {
-			getInfoCountry();
-	}, [date]);
+		getInfoCountry();
+	}, []);
 
 
 	return (
@@ -137,7 +91,9 @@ function HomeFeatures({ setTooltipContent }) {
           );
         })}
       </Selects>
-      <button>Covid cases</button>
+
+      <button onClick={onClickMap()}>Covid cases</button>
+
     </div>
 
       <DivInput>
@@ -163,13 +119,23 @@ function HomeFeatures({ setTooltipContent }) {
         {({ geographies }) =>
           geographies.map((geo) => {
             const infoGeo = geo.properties.NAME.slice(0,13);
+            const covidDate = infoCase.filter((coutry) => coutry.location.slice(0,13) === infoGeo)
+            const resultMore = covidDate.filter((info) => info.date === dateSelect && info.variant === nameVariant)
+            const resultado =  resultMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
+	
             return (
             <Geography
               key={geo.rsmKey}
               geography={geo}
               onMouseEnter={() => onEnter(infoGeo)}
               onMouseLeave={() => onLeave()}
-              style={newStyled}
+              fill={ resultado <= 4 ? '#dbbbb8' : resultado <= 200 ? '#e67a70' : resultado <= 1000 ? '#cf2e1f' : '#8f1106'}
+              stroke={"black"}
+
+              style={{hover: {
+                fill: "#1B89AE",
+                outline: "none"
+              }}}
             />
           )})
         }
