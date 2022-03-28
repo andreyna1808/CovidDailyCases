@@ -9,16 +9,13 @@ const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-map
 
 function HomeFeatures({ setTooltipContent }) {
 	const [ infoCase, setInfoCases ] = useState([]);
-  const [ selectVariant, setSelectVariant] = useState([])
-  const [ nameLocation, setNameLocation] = useState([])
-  const [ selectDate, setSelectDate ] = useState([])
   const [ nameVariant, setNameVariant ] = useState('Alpha')
   const [ date, setDate ] = useState([])
   const [ dateSelect, setDateSelect] = useState('2020-05-11')
   const [ dateValue, setDateValue ] = useState(0)
   const [ newStyled, setNewStyled ] = useState({
     default: {
-      fill: "#D6D6DA",
+      fill: "white",
       stroke: "black",
       outline: "none",
     },
@@ -39,26 +36,12 @@ function HomeFeatures({ setTooltipContent }) {
 	const getInfoCountry = () => {
 		axios.get(`${BASE_URL}`, Apikey).then((res) => {
 			setInfoCases(res.data);
+      dateCorrect();
 		})
     .catch((err) => {
       console.log(err.response);
     })
 	};
-  const getVariant = () => {
-    axios.get(`${BASE_URL}?select=variant`, Apikey).then((res) => {
-			setSelectVariant(res.data);
-		}).catch((err) => {
-      console.log(err.response);
-    })
-  }
-  const getDate = () => {
-    axios.get(`${BASE_URL}?select=date`, Apikey).then((res) => {
-			setSelectDate(res.data);
-      dateCorrect()
-		}).catch((err) => {
-      console.log(err.response);
-    })
-  }
 
 	function getTotalCases(coutryName) {
 		const covidDataTemp = infoCase.filter((coutry) => coutry.location.slice(0,13) === coutryName);
@@ -85,23 +68,68 @@ function HomeFeatures({ setTooltipContent }) {
   };
 
   const dateCorrect = () => {
-    const filterRepetidos = selectDate.map((res) => res.date)
+    const filterRepetidos = infoCase.map((res) => res.date)
     const filtrados = _.uniq(filterRepetidos)
     setDate(filtrados)
+  }
+  
+  const quantidadeCases = infoCase.map((dados) => {
+    return dados.num_sequences_total
+  })
+
+  const onNewStyled = () => {
+    if(quantidadeCases <= 200){
+      setNewStyled({
+        default: {
+          fill: "yellow",
+          stroke: "black",
+          outline: "none",
+        },
+        hover: {
+          fill: "#1B89AE",
+          outline: "none"
+        }
+      })
+    }
+    else if(quantidadeCases >= 200 && quantidadeCases <= 1000){
+      setNewStyled({
+        default: {
+          fill: "oranged",
+          stroke: "black",
+          outline: "none",
+        },
+        hover: {
+          fill: "#1B89AE",
+          outline: "none"
+        }
+      })
+    }
+    else if(quantidadeCases > 1000){
+      setNewStyled({
+        default: {
+          fill: "red",
+          stroke: "black",
+          outline: "none",
+        },
+        hover: {
+          fill: "#1B89AE",
+          outline: "none"
+        }
+      })
+    }
   }
 
 	useEffect(() => {
 			getInfoCountry();
-      getVariant();
-      getDate();
-	}, [infoCase, selectVariant, selectDate]);
+	}, [date]);
 
 
 	return (
     <>
+    <div>
       <Selects onChange={onChange}>
         <Options value={nameVariant}>Alpha</Options>
-         {selectVariant.slice(1,24).map((dados) => {
+         {infoCase.slice(1,24).map((dados) => {
           return (
             <Options key={dados.id} value={dados.variant}>
               {dados.variant}
@@ -109,6 +137,8 @@ function HomeFeatures({ setTooltipContent }) {
           );
         })}
       </Selects>
+      <button>Covid cases</button>
+    </div>
 
       <DivInput>
       <DateDados>

@@ -9,24 +9,11 @@ const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-map
 
 function HomeFeatures({ setTooltipContent }) {
 	const [ infoCase, setInfoCases ] = useState([]);
-  const [ selectVariant, setSelectVariant] = useState([])
-  const [ nameLocation, setNameLocation] = useState([])
-  const [ selectDate, setSelectDate ] = useState([])
   const [ nameVariant, setNameVariant ] = useState('Alpha')
   const [ date, setDate ] = useState([])
   const [ dateSelect, setDateSelect] = useState('2020-05-11')
   const [ dateValue, setDateValue ] = useState(0)
-  const [ newStyled, setNewStyled ] = useState({
-    default: {
-      fill: "#D6D6DA",
-      stroke: "black",
-      outline: "none",
-    },
-    hover: {
-      fill: "#1B89AE",
-      outline: "none"
-    }
-  })
+  const [ newStyled, setNewStyled ] = useState()
 
   const onChange = (e) => {
     setNameVariant(e.target.value)
@@ -39,37 +26,16 @@ function HomeFeatures({ setTooltipContent }) {
 	const getInfoCountry = () => {
 		axios.get(`${BASE_URL}`, Apikey).then((res) => {
 			setInfoCases(res.data);
+      dateCorrect();
+      onNewStyled();
 		})
     .catch((err) => {
       console.log(err.response);
     })
 	};
-  const getVariant = () => {
-    axios.get(`${BASE_URL}?select=variant`, Apikey).then((res) => {
-			setSelectVariant(res.data);
-		}).catch((err) => {
-      console.log(err.response);
-    })
-  }
-  const getDate = () => {
-    axios.get(`${BASE_URL}?select=date`, Apikey).then((res) => {
-			setSelectDate(res.data);
-      dateCorrect()
-		}).catch((err) => {
-      console.log(err.response);
-    })
-  }
-  const getName = () => {
-    axios.get(`${BASE_URL}?select`, Apikey).then((res) => {
-      console.log(res.data);
-			setNameLocation(res.data);
-		}).catch((err) => {
-      console.log(err.response);
-    })
-  }
 
 	function getTotalCases(coutryName) {
-		const covidDataTemp = infoCase.filter((coutry) => coutry.location.toLowerCase().split("").sort().join("").trim().slice(0,12) === coutryName);
+		const covidDataTemp = infoCase.filter((coutry) => coutry.location.slice(0,13) === coutryName);
     const infoMore = covidDataTemp.filter((info) => info.date === dateSelect && info.variant === nameVariant)
     return infoMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
 	}
@@ -93,24 +59,65 @@ function HomeFeatures({ setTooltipContent }) {
   };
 
   const dateCorrect = () => {
-    const filterRepetidos = selectDate.map((res) => res.date)
+    const filterRepetidos = infoCase.map((res) => res.date)
     const filtrados = _.uniq(filterRepetidos)
     setDate(filtrados)
+  }
+  const onNewStyled = () => {
+    const resultadoColor = infoCase.map((dados) => {
+      if(dados.num_sequences_total <= 200){
+        setNewStyled({
+          default: {
+            fill: "#yellow",
+            stroke: "black",
+            outline: "none",
+          },
+          hover: {
+            fill: "#1B89AE",
+            outline: "none"
+          }
+        })
+      }
+      else if(dados.num_sequences_total >= 200 && dados.num_sequences_total <= 1000){
+        setNewStyled({
+          default: {
+            fill: "#oranged",
+            stroke: "black",
+            outline: "none",
+          },
+          hover: {
+            fill: "#1B89AE",
+            outline: "none"
+          }
+        })
+      }
+      else if(dados.num_sequences_total > 1000){
+        setNewStyled({
+          default: {
+            fill: "#red",
+            stroke: "black",
+            outline: "none",
+          },
+          hover: {
+            fill: "#1B89AE",
+            outline: "none"
+          }
+        })
+      }
+    })
+    return resultadoColor
   }
 
 	useEffect(() => {
 			getInfoCountry();
-      getVariant();
-      getDate();
-      getName();
-	}, [infoCase, selectVariant, selectDate]);
+	}, [infoCase, date, newStyled]);
 
 
 	return (
     <>
       <Selects onChange={onChange}>
         <Options value={nameVariant}>Alpha</Options>
-         {selectVariant.slice(1,24).map((dados) => {
+         {infoCase.slice(1,24).map((dados) => {
           return (
             <Options key={dados.id} value={dados.variant}>
               {dados.variant}
@@ -121,8 +128,8 @@ function HomeFeatures({ setTooltipContent }) {
 
       <DivInput>
       <DateDados>
-      {date.map((dados, index) => {
-          return <Paragrafo key={index}>{dados}</Paragrafo>
+      {date.map((dados) => {
+          return <Paragrafo key={dados.id}>{dados}</Paragrafo>
         })}
         </DateDados>
         <input
@@ -141,7 +148,7 @@ function HomeFeatures({ setTooltipContent }) {
       <Geographies geography={geoUrl}>
         {({ geographies }) =>
           geographies.map((geo) => {
-            const infoGeo = geo.properties.NAME.toLowerCase().split("").sort().join("").trim().slice(0,12);
+            const infoGeo = geo.properties.NAME.slice(0,13);
             return (
             <Geography
               key={geo.rsmKey}
