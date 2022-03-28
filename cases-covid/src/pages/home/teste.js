@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+/* import React, { memo, useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography, Graticule, Sphere } from 'react-simple-maps';
 import axios from 'axios';
 import { Apikey, BASE_URL } from '../../constants/urls';
@@ -59,9 +59,17 @@ function HomeFeatures({ setTooltipContent }) {
       console.log(err.response);
     })
   }
+  const getName = () => {
+    axios.get(`${BASE_URL}?select`, Apikey).then((res) => {
+      console.log(res.data);
+			setNameLocation(res.data);
+		}).catch((err) => {
+      console.log(err.response);
+    })
+  }
 
 	function getTotalCases(coutryName) {
-		const covidDataTemp = infoCase.filter((coutry) => coutry.location.slice(0,13) === coutryName);
+		const covidDataTemp = infoCase.filter((coutry) => coutry.location.toLowerCase().split("").sort().join("").trim().slice(0,12) === coutryName);
     const infoMore = covidDataTemp.filter((info) => info.date === dateSelect && info.variant === nameVariant)
     return infoMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
 	}
@@ -94,6 +102,7 @@ function HomeFeatures({ setTooltipContent }) {
 			getInfoCountry();
       getVariant();
       getDate();
+      getName();
 	}, [infoCase, selectVariant, selectDate]);
 
 
@@ -112,8 +121,8 @@ function HomeFeatures({ setTooltipContent }) {
 
       <DivInput>
       <DateDados>
-      {date.map((dados) => {
-          return <Paragrafo key={dados.id}>{dados}</Paragrafo>
+      {date.map((dados, index) => {
+          return <Paragrafo key={index}>{dados}</Paragrafo>
         })}
         </DateDados>
         <input
@@ -132,7 +141,7 @@ function HomeFeatures({ setTooltipContent }) {
       <Geographies geography={geoUrl}>
         {({ geographies }) =>
           geographies.map((geo) => {
-            const infoGeo = geo.properties.NAME.slice(0,13);
+            const infoGeo = geo.properties.NAME.toLowerCase().split("").sort().join("").trim().slice(0,12);
             return (
             <Geography
               key={geo.rsmKey}
@@ -149,4 +158,4 @@ function HomeFeatures({ setTooltipContent }) {
   </>
 );
 };
-export default memo(HomeFeatures);
+export default memo(HomeFeatures); */
