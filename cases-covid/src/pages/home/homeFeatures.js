@@ -67,7 +67,7 @@ function HomeFeatures({ setTooltipContent }) {
       for(let x = 0; x <= arr.length; x++){
         (function(x){
           setTimeout(function(){
-            setDateSelect(arr[x-1]);
+            setDateSelect(arr[x]);
             setDateValue(x)
            }, x * 800); // 1000 = 1 segundo
         }(x));
