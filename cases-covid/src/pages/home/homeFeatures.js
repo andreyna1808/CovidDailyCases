@@ -64,18 +64,21 @@ function HomeFeatures({ setTooltipContent }) {
 
   let arr = date;
   const onClickMap = () => {
-    for(var x = 0; x < arr.length; x++){
-      (function(x){
-        setTimeout(function(){
-          setDateSelect(arr[x]);
-         }, x * 1000); // 1000 = 1 segundo
-      }(x));
-   }
-  }
+      for(let x = 0; x <= arr.length; x++){
+        (function(x){
+          setTimeout(function(){
+            setDateSelect(arr[x-1]);
+            setDateValue(x)
+           }, x * 800); // 1000 = 1 segundo
+        }(x));
+     }
+     setDateValue(0)
+  } 
+
   
 	useEffect(() => {
 		getInfoCountry();
-	}, []);
+	}, [date]);
 
 
 	return (
@@ -92,7 +95,7 @@ function HomeFeatures({ setTooltipContent }) {
         })}
       </Selects>
 
-      <button onClick={onClickMap()}>Covid cases</button>
+      <button onClick={() => onClickMap()}>Covid cases</button>
 
     </div>
 
