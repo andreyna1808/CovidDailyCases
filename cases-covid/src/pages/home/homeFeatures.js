@@ -35,7 +35,8 @@ function HomeFeatures({ setTooltipContent }) {
 
 	function getTotalCases(coutryName) {
 		const covidDataTemp = infoCase.filter((coutry) => coutry.location === coutryName);
-    const infoMore = covidDataTemp.filter((info) => info.date === dateSelect && info.variant === nameVariant)
+    const dadosFiltrados = _.uniq(covidDataTemp)
+    const infoMore = dadosFiltrados.filter((info) => info.date === dateSelect && info.variant === nameVariant)
     return infoMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
 	}
   const onLeave = () => {
@@ -70,8 +71,6 @@ function HomeFeatures({ setTooltipContent }) {
         setHabilitButton(false)
     }, 4000)
   }
-   
-
 
 	useEffect(() => {
 		getInfoCountry();
@@ -117,7 +116,7 @@ function HomeFeatures({ setTooltipContent }) {
         {({ geographies }) =>
           geographies.map((geo) => {
             const infoGeo = geo.properties.NAME.slice(0,13);
-            const resultado = getTotalCases(infoGeo)
+            const resultado = getTotalCases(infoGeo)      
 
             return (
             <Geography
@@ -133,8 +132,7 @@ function HomeFeatures({ setTooltipContent }) {
                 })
                 setTooltipContent(`
                 Country: ${data.location || infoGeo} |
-                Date: ${dateSelect  ?? ""} |
-                Variant: ${nameVariant ?? ""} |
+                Date: ${dateSelect} |
                 Cases total: ${totalCases}
                   `);
               }}
