@@ -13,6 +13,7 @@ function HomeFeatures({ setTooltipContent }) {
   const [ date, setDate ] = useState([])
   const [ dateSelect, setDateSelect] = useState('2020-05-11')
   const [ dateValue, setDateValue ] = useState(0)
+  const [habilitButton, setHabilitButton ] = useState(true)
 
   const onChange = (e) => {
     setNameVariant(e.target.value)
@@ -59,21 +60,34 @@ function HomeFeatures({ setTooltipContent }) {
   const dateCorrect = () => {
     const filterRepetidos = infoCase.map((res) => res.date)
     const filtrados = _.uniq(filterRepetidos)
-    setDate(filtrados)
+    let newArray = []
+    for(let i = 0; i <= filtrados.length; i+=5){
+      newArray.push(filtrados[i])
+    }
+    setDate(newArray)
+    infoButton();
   }
 
   let arr = date;
   const onClickMap = () => {
-      for(let x = 0; x <= arr.length; x++){
+      for(let x = dateValue; x <= arr.length; x++){
         (function(x){
           setTimeout(function(){
             setDateSelect(arr[x]);
             setDateValue(x)
-           }, x * 800); // 1000 = 1 segundo
+           }, x * 2000); // 1000 = 1 segundo
         }(x));
      }
   }
-  
+
+  const infoButton = () => {
+    setTimeout(function () {
+        setHabilitButton(false)
+    },3000)
+  }
+   
+
+
 	useEffect(() => {
 		getInfoCountry();
 	}, [date]);
@@ -84,7 +98,7 @@ function HomeFeatures({ setTooltipContent }) {
     <div>
       <Selects onChange={onChange}>
         <Options value={nameVariant}>Alpha</Options>
-         {infoCase.slice(1,24).map((dados) => {
+         {infoCase.slice(0,24).map((dados) => {
           return (
             <Options key={dados.id} value={dados.variant}>
               {dados.variant}
@@ -93,29 +107,29 @@ function HomeFeatures({ setTooltipContent }) {
         })}
       </Selects>
 
-      <Button onClick={() => onClickMap()}> ▶ Play Covid</Button>
+      <Button disabled={habilitButton} onClick={() => onClickMap()}> ▶ Play Covid</Button>
 
     </div>
 
       <DivInput>
       <DateDados>
-      {date.map((dados) => {
-          return <Paragrafo key={dados.id}>{dados}</Paragrafo>
+      {date.map((dados, index) => {
+          return <Paragrafo key={index}>{dados}</Paragrafo>
         })}
         </DateDados>
         <input
         min='1'
-        max='45'
+        max='9'
         value={dateValue}
         onChange={(e) => dateSlectValue(Number(e.target.value))}
         type="range"
       />
       </DivInput>
 
-    <div>
-    <ComposableMap data-tip="" projectionConfig={{ scale: 110 }}>
-      <Sphere fill="#0F3C4C" stroke="red" />
-			<Graticule fill="#0F3C4C" stroke="black" />
+    <div className="mx-1">
+    <ComposableMap data-tip="" projectionConfig={{ scale: 200 }}>
+      <Sphere fill="#0F3C4C"/>
+			<Graticule fill="#0F3C4C"/>
       <Geographies geography={geoUrl}>
         {({ geographies }) =>
           geographies.map((geo) => {

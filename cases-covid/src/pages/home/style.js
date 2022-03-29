@@ -1,24 +1,27 @@
 import styled from "styled-components"
 
 export const DivInput = styled.div`
-  width: 100%;
+  width: 90%;
+  margin-left: 5%;
+  justify-content: center;
   display: flex;
   flex-direction: column;
-  margin-top: 10% 0;
 `
 
 export const DateDados = styled.div`
   display: flex;
   flex-direction: row;
-  width: 100%;
+  justify-content: space-between;
 `
 
 export const Paragrafo = styled.p`
-  width: 100%;
-  height: 50px;
-  padding: 1% 0.5%;
-  font-size: 10px;
+  padding: 2% 0;
+  font-size: 18px;
   overflow: hidden;
+  @media (max-width: 700px) {
+    font-size: 12px;
+    padding: 2%;
+	}
 `
 export const ButtonComeBack = styled.button`
 	position: absolute;
@@ -63,12 +66,17 @@ export const Button = styled.button`
     margin-left: 5%;
     color: #ffffff;
     border: #1b89ae solid 2px;
-    cursor: pointer;
     font-weight: 900;
     &:hover{
+        cursor: pointer;
         background-color:  #ffffff;
         color: #0f334c;
         transition: 0.3s;
+    }
+    &:disabled {
+      color: black;
+      background-color: transparent;
+      border: black solid 2px;
     }
     @media (max-width: 700px) {
       margin: 5% auto;
