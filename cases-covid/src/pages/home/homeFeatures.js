@@ -33,26 +33,6 @@ function HomeFeatures({ setTooltipContent }) {
     })
 	};
 
-	function getTotalCases(coutryName) {
-		const covidDataTemp = infoCase.filter((coutry) => coutry.location.slice(0,13) === coutryName);
-    const infoMore = covidDataTemp.filter((info) => info.date === dateSelect && info.variant === nameVariant)
-    return infoMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
-	}
-  const onEnter = (dados) => {
-    let data = [];
-    const totalCases = getTotalCases(dados)
-    infoCase.forEach((info) => {
-      if (info.location === dados) {
-        data = info;
-      }
-    })
-    setTooltipContent(`
-    Country: ${dados || data.location || ''} |
-    Date: ${dateSelect || ''} |
-    Variant: ${nameVariant || ''} |
-    Cases total: ${totalCases}
-      `);
-  };
   const onLeave = () => {
     setTooltipContent("");
   };
@@ -88,7 +68,7 @@ function HomeFeatures({ setTooltipContent }) {
 
 	useEffect(() => {
 		getInfoCountry();
-	}, [date, nameVariant, dateSelect, infoCase]);
+	}, [date]);
 
 
 	return (
@@ -138,7 +118,20 @@ function HomeFeatures({ setTooltipContent }) {
             <Geography
               key={geo.rsmKey}
               geography={geo}
-              onMouseEnter={() => onEnter(infoGeo)}
+              onMouseEnter={() => {
+                let data = [];
+                infoCase.forEach((info) => {
+                  if (info.location === infoGeo) {
+                    data = info;
+                  }
+                })
+                setTooltipContent(`
+                Country: ${infoGeo || data.location} |
+                Date: ${dateSelect} |
+                Variant: ${nameVariant} |
+                Cases total: ${resultado}
+                  `);
+              }}
               onMouseLeave={() => onLeave()}
               fill={ resultado <= 4 ? '#dbbbb8' : resultado <= 200 ? '#e67a70' : resultado <= 1000 ? '#cf2e1f' : '#8f1106'}
               stroke={"black"}
