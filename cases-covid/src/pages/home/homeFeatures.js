@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { ComposableMap, Geographies, Geography, Graticule, Sphere } from 'react-simple-maps';
+import { ComposableMap, Geographies, Geography} from 'react-simple-maps';
 import axios from 'axios';
 import { Apikey, BASE_URL } from '../../constants/urls';
 import { Button, DateDados, DivInput, Options, Paragrafo, Selects } from './style';
@@ -13,7 +13,7 @@ function HomeFeatures({ setTooltipContent }) {
   const [ date, setDate ] = useState([])
   const [ dateSelect, setDateSelect] = useState('2020-05-11')
   const [ dateValue, setDateValue ] = useState(0)
-  const [habilitButton, setHabilitButton ] = useState(true)
+  const [ habilitButton, setHabilitButton ] = useState(true)
 
   const onChange = (e) => {
     setNameVariant(e.target.value)
@@ -47,9 +47,9 @@ function HomeFeatures({ setTooltipContent }) {
       }
     })
     setTooltipContent(`
-    Country: ${dados} |
-    Date: ${dateSelect} |
-    Variant: ${nameVariant} |
+    Country: ${dados || data.location || ''} |
+    Date: ${dateSelect || ''} |
+    Variant: ${nameVariant || ''} |
     Cases total: ${totalCases}
       `);
   };
@@ -83,14 +83,14 @@ function HomeFeatures({ setTooltipContent }) {
   const infoButton = () => {
     setTimeout(function () {
         setHabilitButton(false)
-    },3000)
+    },4000)
   }
    
 
 
 	useEffect(() => {
 		getInfoCountry();
-	}, [date]);
+	}, [date, nameVariant]);
 
 
 	return (
@@ -98,9 +98,9 @@ function HomeFeatures({ setTooltipContent }) {
     <div>
       <Selects onChange={onChange}>
         <Options value={nameVariant}>Alpha</Options>
-         {infoCase.slice(0,24).map((dados) => {
+         {infoCase.slice(0,24).map((dados, index) => {
           return (
-            <Options key={dados.id} value={dados.variant}>
+            <Options key={index} value={dados.variant}>
               {dados.variant}
             </Options>
           );
@@ -126,10 +126,8 @@ function HomeFeatures({ setTooltipContent }) {
       />
       </DivInput>
 
-    <div className="mx-1">
-    <ComposableMap data-tip="" projectionConfig={{ scale: 200 }}>
-      <Sphere fill="#0F3C4C"/>
-			<Graticule fill="#0F3C4C"/>
+      <div className="mx-1">
+      <ComposableMap data-tip="" projectionConfig={{ scale: 180 }}>
       <Geographies geography={geoUrl}>
         {({ geographies }) =>
           geographies.map((geo) => {
@@ -155,7 +153,7 @@ function HomeFeatures({ setTooltipContent }) {
           )})
         }
       </Geographies>
-    </ComposableMap>
+      </ComposableMap>
     </div>
   </>
 );
