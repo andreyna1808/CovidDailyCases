@@ -82,3 +82,11 @@ export const Button = styled.button`
       margin: 5% auto;
 	  }
 `
+export const DivInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`
+export const DadosP = styled.h2`
+  margin: 0 10%;
+`

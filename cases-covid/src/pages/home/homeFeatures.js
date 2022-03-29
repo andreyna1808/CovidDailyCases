@@ -2,7 +2,7 @@ import React, { memo, useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography} from 'react-simple-maps';
 import axios from 'axios';
 import { Apikey, BASE_URL } from '../../constants/urls';
-import { Button, DateDados, DivInput, Options, Paragrafo, Selects } from './style';
+import { Button, DadosP, DateDados, DivInfo, DivInput, Options, Paragrafo, Selects } from './style';
 const _ = require("lodash"); 
 
 const geoUrl = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json';
@@ -39,9 +39,6 @@ function HomeFeatures({ setTooltipContent }) {
     const infoMore = dadosFiltrados.filter((info) => info.date === dateSelect && info.variant === nameVariant)
     return infoMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
 	}
-  const onLeave = () => {
-    setTooltipContent("");
-  };
 
   const dateCorrect = () => {
     const filterRepetidos = infoCase.map((res) => res.date)
@@ -95,6 +92,11 @@ function HomeFeatures({ setTooltipContent }) {
 
     </div>
 
+    <DivInfo>
+      <DadosP>Date: {dateSelect}</DadosP>
+      <DadosP>Variant: {nameVariant}</DadosP>
+    </DivInfo>
+
       <DivInput>
       <DateDados>
       {date.map((dados, index) => {
@@ -132,11 +134,10 @@ function HomeFeatures({ setTooltipContent }) {
                 })
                 setTooltipContent(`
                 Country: ${data.location || infoGeo} |
-                Date: ${dateSelect} |
                 Cases total: ${totalCases}
-                  `);
+                `);
               }}
-              onMouseLeave={() => onLeave()}
+              onMouseLeave={() => setTooltipContent("")}
               fill={ resultado <= 4 ? '#dbbbb8' : resultado <= 200 ? '#e67a70' : resultado <= 1000 ? '#cf2e1f' : '#8f1106'}
               stroke={"black"}
 
