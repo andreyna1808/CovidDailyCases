@@ -85,12 +85,10 @@ function HomeFeatures({ setTooltipContent }) {
         setHabilitButton(false)
     },4000)
   }
-   
-
 
 	useEffect(() => {
 		getInfoCountry();
-	}, [date, nameVariant]);
+	}, [date, nameVariant, dateSelect, infoCase]);
 
 
 	return (
@@ -98,7 +96,7 @@ function HomeFeatures({ setTooltipContent }) {
     <div>
       <Selects onChange={onChange}>
         <Options value={nameVariant}>Alpha</Options>
-         {infoCase.slice(0,24).map((dados, index) => {
+         {infoCase.slice(1,24).map((dados, index) => {
           return (
             <Options key={index} value={dados.variant}>
               {dados.variant}
