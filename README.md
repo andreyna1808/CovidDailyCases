@@ -5,15 +5,17 @@
 ## :hammer: Funcionalidades do projeto
 - `Funcionalidade 1`: Visualizar o mapa e poder ver País, Data, Variant e o total de casos dessa variant.
 - `Funcionalidade 2`: Poder ver conforme a variante em determinada data.
+- `Funcionalidade 3`: Dar play e ver a evolução do covid ao longo do tempo
+
 
 ### Autora
   [<img src="https://avatars.githubusercontent.com/u/87716793?v=4" width=115><br><sub>Andreyna Carvalho</sub>](https://github.com/andreyna1808)
 
-### Veja o projeto: https://overrated-mass.surge.sh/
+### Veja o projeto: http://drica-casescovid.surge.sh/
 
+![mapa](https://user-images.githubusercontent.com/87716793/160568441-f0b31fba-0393-48f6-8b41-8c2b760761f8.png)
 
 ### IMAGEM EM DESKTOP E MOBILE
-![exemplo](https://user-images.githubusercontent.com/87716793/158157895-1adb0bac-3371-4220-9bfd-452c0840d2b9.png)
 
 
 ### Lista com linguagem, framework e/ou tecnologias usadas
