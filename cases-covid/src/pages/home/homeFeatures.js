@@ -33,6 +33,11 @@ function HomeFeatures({ setTooltipContent }) {
     })
 	};
 
+	function getTotalCases(coutryName) {
+		const covidDataTemp = infoCase.filter((coutry) => coutry.location === coutryName);
+    const infoMore = covidDataTemp.filter((info) => info.date === dateSelect && info.variant === nameVariant)
+    return infoMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
+	}
   const onLeave = () => {
     setTooltipContent("");
   };
@@ -63,12 +68,14 @@ function HomeFeatures({ setTooltipContent }) {
   const infoButton = () => {
     setTimeout(function () {
         setHabilitButton(false)
-    },4000)
+    }, 4000)
   }
+   
+
 
 	useEffect(() => {
 		getInfoCountry();
-	}, [date]);
+	});
 
 
 	return (
@@ -76,9 +83,9 @@ function HomeFeatures({ setTooltipContent }) {
     <div>
       <Selects onChange={onChange}>
         <Options value={nameVariant}>Alpha</Options>
-         {infoCase.slice(1,24).map((dados, index) => {
+         {infoCase.slice(1,24).map((dados) => {
           return (
-            <Options key={index} value={dados.variant}>
+            <Options key={dados.id} value={dados.variant}>
               {dados.variant}
             </Options>
           );
@@ -105,31 +112,30 @@ function HomeFeatures({ setTooltipContent }) {
       </DivInput>
 
       <div className="mx-1">
-      <ComposableMap data-tip="" projectionConfig={{ scale: 180 }}>
+    <ComposableMap data-tip="" projectionConfig={{ scale: 180 }}>
       <Geographies geography={geoUrl}>
         {({ geographies }) =>
           geographies.map((geo) => {
             const infoGeo = geo.properties.NAME.slice(0,13);
-            const covidDate = infoCase.filter((coutry) => coutry.location.slice(0,13) === infoGeo)
-            const resultMore = covidDate.filter((info) => info.date === dateSelect && info.variant === nameVariant)
-            const resultado =  resultMore.reduce((previousValue, currentValue) => previousValue + currentValue.num_sequences_total, 0)
-	
+            const resultado = getTotalCases(infoGeo)
+
             return (
             <Geography
               key={geo.rsmKey}
               geography={geo}
               onMouseEnter={() => {
                 let data = [];
+                const totalCases = getTotalCases(infoGeo)
                 infoCase.forEach((info) => {
                   if (info.location === infoGeo) {
                     data = info;
                   }
                 })
                 setTooltipContent(`
-                Country: ${infoGeo || data.location} |
-                Date: ${dateSelect} |
-                Variant: ${nameVariant} |
-                Cases total: ${resultado}
+                Country: ${data.location || infoGeo} |
+                Date: ${dateSelect  ?? ""} |
+                Variant: ${nameVariant ?? ""} |
+                Cases total: ${totalCases}
                   `);
               }}
               onMouseLeave={() => onLeave()}
@@ -144,7 +150,7 @@ function HomeFeatures({ setTooltipContent }) {
           )})
         }
       </Geographies>
-      </ComposableMap>
+    </ComposableMap>
     </div>
   </>
 );
