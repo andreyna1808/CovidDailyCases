@@ -18,9 +18,10 @@
 
 ### Veja o projeto: https://covid-cases-really-3f58oa8kj-andreyna1808.vercel.app/
 
-![mapa](https://user-images.githubusercontent.com/87716793/160568441-f0b31fba-0393-48f6-8b41-8c2b760761f8.png)
 
 ### IMAGEM EM DESKTOP E MOBILE
+
+![resultado](https://user-images.githubusercontent.com/87716793/160861647-daea5d01-76d2-4880-b351-568e1a889473.png)
 
 
 ### Lista com linguagem, framework e/ou tecnologias usadas
