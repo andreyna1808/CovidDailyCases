@@ -7,11 +7,16 @@
 - `Funcionalidade 2`: Poder ver conforme a variante em determinada data.
 - `Funcionalidade 3`: Dar play e ver a evolução do covid ao longo do tempo
 
+## :hammer: Funcionalidades do projeto
+- `Problema 1`: Apesar de escolher a variante ela fica apenas para enfeite, uma vez que a soma dos casos não se altera, apenas com a data.
+- `Problema 2`: Quando muito utilizado o supabase dá um bug e dai não é possível vizualizar nada.
+
+
 
 ### Autora
   [<img src="https://avatars.githubusercontent.com/u/87716793?v=4" width=115><br><sub>Andreyna Carvalho</sub>](https://github.com/andreyna1808)
 
-### Veja o projeto: http://drica-casescovid.surge.sh/
+### Veja o projeto: https://covid-cases-really-3f58oa8kj-andreyna1808.vercel.app/
 
 ![mapa](https://user-images.githubusercontent.com/87716793/160568441-f0b31fba-0393-48f6-8b41-8c2b760761f8.png)
 
