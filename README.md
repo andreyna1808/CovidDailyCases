@@ -12,8 +12,7 @@ Site: https://coodesh.com/
 ## :hammer: Funcionalidades do projeto
 - `Problema 1`: Apesar de escolher a variante ela fica apenas para enfeite, uma vez que a soma dos casos não se altera, apenas com a data.
 - `Problema 2`: Quando muito utilizado o supabase dá um bug e dai não é possível vizualizar nada.
-
-
+- `Problema 2`: Por eu colocar para percorrer uma arquivo grande mais de uma vez deixa a agilidade comprometida e algumas vezes pode ficar tudo branco.
 
 ### Autora
   [<img src="https://avatars.githubusercontent.com/u/87716793?v=4" width=115><br><sub>Andreyna Carvalho</sub>](https://github.com/andreyna1808)
