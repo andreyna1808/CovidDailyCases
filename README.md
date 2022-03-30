@@ -1,6 +1,8 @@
-# CovidDailyCases -> Challenge da Coodesh
+# CovidDailyCases -> Challenge by Coodesh
 
-### Repositório do desafio da CODESH
+Site: https://coodesh.com/
+
+### Repositório do desafio da CODESH 
 
 ## :hammer: Funcionalidades do projeto
 - `Funcionalidade 1`: Visualizar o mapa e poder ver País, Data, Variant e o total de casos dessa variant.
